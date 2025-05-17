@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { supabase } from '~/utils/supabaseClient';
+import { useRouter } from 'next/router';
 
 export default function AuthPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,10 +21,21 @@ export default function AuthPage() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         setSuccess('Login successful!');
+        // Redirect after successful login
+        router.push('/tasks');
       } else {
-        const { error } = await supabase.auth.signUp({ email, password });
+        const { data, error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
+        // Insert into profiles table if signup is successful and user exists
+        const user = data?.user;
+        if (user) {
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert([{ id: user.id }]);
+          if (profileError) throw profileError;
+        }
         setSuccess('Signup successful! Check your email for verification.');
+        router.push('/dashboard');
       }
     } catch (err: any) {
       setError(err.message || 'Authentication failed');

@@ -21,7 +21,7 @@ This document tracks the implementation status of all required features for the 
 - [x] Supabase client integrated (`@supabase/supabase-js`)
 - [x] Supabase credentials added to `.env`
 - [ ] Database schema designed for tasks, projects, users
-- [ ] CRUD operations for tasks/projects via Supabase
+- [x] CRUD operations for tasks/projects via Supabase
 - [x] Email/password login/signup using Supabase Auth
 
 ## 5. Dashboard (Optional)
