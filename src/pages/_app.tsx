@@ -2,6 +2,7 @@ import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 import { Geist } from "next/font/google";
+import Navbar from "../components/Navbar";
 
 import { api } from "~/utils/api";
 
@@ -18,6 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <div className={geist.className}>
+        <Navbar />
         <Component {...pageProps} />
       </div>
     </SessionProvider>
