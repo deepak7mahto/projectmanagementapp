@@ -1,9 +1,25 @@
-import { useSession, signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { supabase } from "~/utils/supabaseClient";
 import Head from "next/head";
 import Link from "next/link";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user);
+    };
+    getUser();
+    // Listen to auth state changes
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <>
@@ -21,7 +37,7 @@ export default function Home() {
             A powerful tool to manage your projects, tasks, and team collaboration in one place.
           </p>
           <div className="flex flex-col items-center gap-4">
-            {session ? (
+            {user ? (
               <Link
                 href="/dashboard"
                 className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
@@ -29,12 +45,12 @@ export default function Home() {
                 Go to Dashboard
               </Link>
             ) : (
-              <button
-                onClick={() => void signIn()}
+              <Link
+                href="/auth"
                 className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
               >
-                Sign in to get started
-              </button>
+                Sign in / Sign up to get started
+              </Link>
             )}
           </div>
         </div>

@@ -1,9 +1,9 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
+
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt"; // For password hashing
 
-import { db } from "~/server/db";
+
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -56,22 +56,12 @@ export const authConfig = {
             ? credentials.password
             : undefined;
         if (!email || !password) return null;
-        // Find user by email
-        const user = await db.user.findUnique({ where: { email } });
-        if (!user || !user.email || !user.password) return null;
-        // Compare password
-        const valid = await bcrypt.compare(password, user.password);
-        if (!valid) return null;
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          image: user.image ?? undefined,
-        };
+        // Supabase Auth handles authentication. See /auth.tsx for implementation.
+        return null;
       },
     }),
   ],
-  adapter: PrismaAdapter(db),
+  // Supabase Auth will be used instead of PrismaAdapter
   callbacks: {
     session: ({ session, user }) => ({
       ...session,

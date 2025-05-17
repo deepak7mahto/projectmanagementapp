@@ -1,19 +1,34 @@
 import { z } from "zod";
-import { type Task, type Prisma } from "@prisma/client";
+
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
-// Define enums that match Prisma schema
+// TODO: Define enums/types that match Supabase schema
 const TaskStatus = z.enum(["TODO", "IN_PROGRESS", "IN_REVIEW", "DONE"]);
 type TaskStatusType = z.infer<typeof TaskStatus>;
 
 const Priority = z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]);
 type PriorityType = z.infer<typeof Priority>;
 
-type TaskWithRelations = Task & {
-  project: { id: string; name: string };
-  createdBy: { id: string; name: string | null };
-  assignees: Array<{ userId: string; user: { id: string; name: string | null } }>;
-  tags: Array<{ tagId: string; tag: { id: string; name: string } }>;
+// Define a plain Task type matching Supabase schema
+export type Task = {
+  id: string;
+  title: string;
+  description?: string;
+  status: TaskStatusType;
+  priority: PriorityType;
+  dueDate?: Date | null;
+  projectId: string;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+// Define TaskWithRelations for richer queries (optional, can be expanded for Supabase joins)
+export type TaskWithRelations = Task & {
+  project?: { id: string; name: string };
+  createdByUser?: { id: string; name: string | null };
+  assignees?: Array<{ userId: string; user: { id: string; name: string | null } }>;
+  tags?: Array<{ tagId: string; tag: { id: string; name: string } }>;
 };
 
 export const taskRouter = createTRPCRouter({
