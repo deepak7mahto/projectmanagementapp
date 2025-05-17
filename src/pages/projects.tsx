@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import {
   getProjects,
   createProject,
@@ -32,9 +33,8 @@ export default function ProjectsPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(false);
-  const [showProjectForm, setShowProjectForm] = useState(false);
-  const [projectForm, setProjectForm] = useState({ name: "", description: "" });
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   // Load all projects
   useEffect(() => {
@@ -59,21 +59,7 @@ export default function ProjectsPage() {
   }, [selectedProject]);
 
   // Project CRUD handlers
-  const handleCreateProject = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    try {
-      const newProject = await createProject(projectForm);
-      setProjects((prev) => [newProject, ...prev]);
-      setProjectForm({ name: "", description: "" });
-      setShowProjectForm(false);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Removed inline handleCreateProject logic; creation now handled in /projects/add page.
 
   const handleDeleteProject = async (id: string) => {
     if (!confirm("Delete this project?")) return;
@@ -101,10 +87,10 @@ export default function ProjectsPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <h1 style={{ margin: 0, fontSize: 32, fontWeight: 700 }}>Projects</h1>
         <button
-          onClick={() => setShowProjectForm((v) => !v)}
+          onClick={() => router.push('/projects/add')}
           style={{ 
             padding: '8px 16px', 
-            backgroundColor: showProjectForm ? '#f44336' : '#0070f3', 
+            backgroundColor: '#0070f3', 
             color: 'white', 
             border: 'none',
             borderRadius: 4,
@@ -112,64 +98,13 @@ export default function ProjectsPage() {
             cursor: 'pointer'
           }}
         >
-          {showProjectForm ? "Cancel" : "New Project"}
+          New Project
         </button>
       </div>
       
       {error && <div style={{ color: "red", padding: 12, backgroundColor: '#ffebee', borderRadius: 4, marginBottom: 16 }}>{error}</div>}
       
-      {showProjectForm && (
-        <div style={{ 
-          marginBottom: 24, 
-          padding: 16, 
-          backgroundColor: '#f5f5f5', 
-          borderRadius: 8,
-          border: '1px solid #eee'
-        }}>
-          <h3 style={{ marginTop: 0, marginBottom: 16 }}>Create New Project</h3>
-          <form onSubmit={handleCreateProject}>
-            <div style={{ marginBottom: 16 }}>
-              <label htmlFor="name" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Project Name *</label>
-              <input
-                id="name"
-                required
-                placeholder="Enter project name"
-                value={projectForm.name}
-                onChange={(e) => setProjectForm((f) => ({ ...f, name: e.target.value }))}
-                style={{ display: 'block', width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ddd' }}
-              />
-            </div>
-            
-            <div style={{ marginBottom: 16 }}>
-              <label htmlFor="description" style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Description</label>
-              <textarea
-                id="description"
-                placeholder="Enter project description"
-                value={projectForm.description}
-                onChange={(e) => setProjectForm((f) => ({ ...f, description: e.target.value }))}
-                style={{ display: 'block', width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ddd', minHeight: 80 }}
-              />
-            </div>
-            
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button 
-                type="submit" 
-                style={{ 
-                  padding: '8px 16px', 
-                  backgroundColor: '#0070f3', 
-                  color: 'white', 
-                  border: 'none',
-                  borderRadius: 4,
-                  fontWeight: 500,
-                  cursor: 'pointer'
-                }}
-              >
-                Create Project
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+
       
       {loading ? (
         <div style={{ textAlign: 'center', padding: 40 }}>
