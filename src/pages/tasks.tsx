@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getTasksByProject, createTask, updateTask, deleteTask, getTaskById } from '../utils/supabaseTasks';
 import { getProjects } from '../utils/supabaseProjects';
 import { getCurrentUserId } from '../utils/getCurrentUserId';
+import { assignTagsToTask } from '../utils/supabaseTags';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -128,7 +129,7 @@ const TaskManagementPage = () => {
     setShowForm(false);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, selectedTagIds?: string[]) => {
     e.preventDefault();
     if (!selectedProjectId) {
       setError('Please select a project');
@@ -141,21 +142,35 @@ const TaskManagementPage = () => {
         return;
       }
       
+      let taskId: string;
+      
       if (editingTask) {
         // Update existing task
-        await updateTask(editingTask.id, {
+        const updatedTask = await updateTask(editingTask.id, {
           ...formData,
           due_date: formData.due_date || null,
         });
+        taskId = editingTask.id;
         setEditingTask(null);
       } else {
         // Create new task
-        await createTask({
+        const newTask = await createTask({
           ...formData,
           project_id: selectedProjectId,
           created_by: userId,
           due_date: formData.due_date || null,
         });
+        taskId = newTask.id;
+      }
+      
+      // Handle tag assignments if tags were selected
+      if (selectedTagIds && selectedTagIds.length > 0) {
+        try {
+          await assignTagsToTask(taskId, selectedTagIds);
+        } catch (tagErr) {
+          console.error('Error assigning tags:', tagErr);
+          // Continue with the task creation/update even if tag assignment fails
+        }
       }
       
       setShowForm(false);
@@ -216,21 +231,22 @@ const TaskManagementPage = () => {
           onProjectChange={handleProjectChange} 
         />
         
-        <button 
+        <button
           onClick={() => {
             if (showForm && !editingTask) {
               setShowForm(false);
             } else if (showForm && editingTask) {
               cancelEdit();
             } else {
-              setShowForm(true);
+              // Instead of showing the form inline, navigate to /tasks/add
+              router.push('/tasks/add');
             }
           }}
-          style={{ 
-            padding: '8px 16px', 
-            borderRadius: 4, 
-            border: 'none', 
-            background: showForm ? '#f44336' : '#0070f3', 
+          style={{
+            padding: '8px 16px',
+            borderRadius: 4,
+            border: 'none',
+            background: showForm ? '#f44336' : '#0070f3',
             color: 'white',
             fontWeight: 500,
             cursor: 'pointer'

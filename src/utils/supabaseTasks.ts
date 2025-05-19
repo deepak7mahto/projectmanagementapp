@@ -12,6 +12,7 @@ type Task = {
   created_by: string;
   created_at: string;
   updated_at: string;
+  assigned_to?: string | null;
 };
 
 // CREATE a task
