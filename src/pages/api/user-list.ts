@@ -9,8 +9,10 @@ export default async function handler(
     // Fetch all profiles
     const { data: profiles, error: profilesError } = await supabase
       .from("profiles")
-      .select("id, displayName, email")
+      .select("*")
       .order("displayName");
+
+    console.log("DEBUG: Profiles:", profiles);
 
     if (profilesError) throw profilesError;
 
