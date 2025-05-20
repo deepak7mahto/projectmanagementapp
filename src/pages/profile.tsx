@@ -222,6 +222,31 @@ export default function ProfilePage() {
           Save Changes
         </button>
       </form>
+      <div className="mt-10 text-center">
+        <button
+          className="bg-red-600 text-white px-6 py-2 rounded font-semibold hover:bg-red-700"
+          style={{ marginTop: 24 }}
+          onClick={async () => {
+            if (window.confirm('Are you sure you want to delete your account? This cannot be undone.')) {
+              setLoading(true);
+              setError("");
+              try {
+                // Remove profile row
+                await import('../utils/supabaseUsers').then(mod => mod.deleteProfileById(profile.id));
+                // Sign out
+                await import('../utils/supabaseClient').then(mod => mod.supabase.auth.signOut());
+                router.replace('/auth');
+              } catch (err: any) {
+                setError('Failed to delete account: ' + (err.message || err));
+              } finally {
+                setLoading(false);
+              }
+            }
+          }}
+        >
+          Delete Account
+        </button>
+      </div>
     </div>
   );
 }

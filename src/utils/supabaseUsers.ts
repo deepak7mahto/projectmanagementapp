@@ -27,6 +27,15 @@ export async function getAllProfiles() {
 }
 
 // Get a profile by ID
+export async function deleteProfileById(id: string) {
+  const { error } = await supabase
+    .from("profiles")
+    .delete()
+    .eq("id", id);
+  if (error) throw error;
+  return true;
+}
+
 export async function getProfileById(id: string) {
   const { data, error } = await supabase
     .from("profiles")
