@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 interface Profile {
   id: string;
-  full_name: string;
+  displayName: string;
   email?: string;
   avatar_url?: string;
 }
@@ -73,9 +73,9 @@ const UserSelector: React.FC<UserSelectorProps> = ({ selectedUserId, onChange })
           <option value="">Select a user</option>
           {profiles.map(profile => (
             <option key={profile.id} value={profile.id}>
-              {profile.full_name && profile.email
-                ? `${profile.full_name} (${profile.email})`
-                : profile.full_name || profile.email || profile.id
+              {profile.displayName && profile.email
+                ? `${profile.displayName} (${profile.email})`
+                : profile.displayName || profile.email || profile.id
               }
             </option>
           ))}

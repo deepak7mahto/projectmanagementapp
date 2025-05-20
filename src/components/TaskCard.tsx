@@ -10,7 +10,7 @@ interface Tag {
 
 interface Profile {
   id: string;
-  full_name: string;
+  displayName: string;
   avatar_url?: string;
 }
 
@@ -184,7 +184,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete }) => {
           </div>
           {task.assigned_to && (
             <div style={{ marginTop: 4 }}>
-              <span style={{ fontWeight: 500 }}>Assigned to:</span> {assignedUser ? assignedUser.full_name : task.assigned_to}
+              <span style={{ fontWeight: 500 }}>Assigned to:</span> {assignedUser ? assignedUser.displayName : task.assigned_to}
             </div>
           )}
         </div>

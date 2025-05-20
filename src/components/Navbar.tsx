@@ -1,70 +1,79 @@
 import Link from "next/link";
 import React from "react";
-import { supabase } from "../utils/supabaseClient";
-import { useRouter } from "next/router";
+import {
+  FaSignOutAlt,
+  FaTasks,
+  FaProjectDiagram,
+  FaUserCircle,
+} from "react-icons/fa";
+import { useUser } from "../context/UserContext";
 
 export default function Navbar() {
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push("/auth");
-  };
+  const { user, logout, loading, isAuthenticated } = useUser();
 
   return (
-    <nav
-      style={{
-        width: "100%",
-        background: "#1a237e",
-        color: "#fff",
-        padding: "12px 0",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: 900,
-          margin: "0 auto",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 24px",
-        }}
-      >
-        <div style={{ fontWeight: 700, fontSize: 22 }}>
-          <Link href="/" style={{ color: "#fff", textDecoration: "none" }}>
-            Project Management App
+    <nav className="w-full bg-indigo-900 text-white shadow-md">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3">
+        {/* Logo / App Name */}
+        <div className="flex items-center gap-2 text-xl font-bold">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80">
+            <span className="rounded-full bg-blue-600 px-3 py-1 text-lg font-extrabold tracking-wide text-white">
+              PM
+            </span>
+            <span className="hidden sm:inline">Project Management</span>
           </Link>
         </div>
-        <div style={{ display: "flex", gap: 24 }}>
-          <Link
-            href="/projects"
-            style={{ color: "#fff", textDecoration: "none", fontWeight: 500 }}
-          >
-            Projects
-          </Link>
-          <Link
-            href="/tasks"
-            style={{ color: "#fff", textDecoration: "none", fontWeight: 500 }}
-          >
-            Tasks
-          </Link>
-          <button
-            onClick={handleLogout}
-            style={{
-              marginLeft: 24,
-              background: "#f44336",
-              color: "#fff",
-              border: "none",
-              borderRadius: 4,
-              padding: "6px 16px",
-              fontWeight: 500,
-              cursor: "pointer",
-            }}
-          >
-            Logout
-          </button>
-        </div>
+        {/* Nav Links and User Info: Only for authenticated users */}
+        {isAuthenticated && !loading && (
+          <>
+            <div className="flex items-center gap-6">
+              <Link
+                href="/projects"
+                className="flex items-center gap-1 transition hover:text-blue-300"
+              >
+                <FaProjectDiagram className="inline-block" />
+                <span className="hidden sm:inline">Projects</span>
+              </Link>
+              <Link
+                href="/tasks"
+                className="flex items-center gap-1 transition hover:text-blue-300"
+              >
+                <FaTasks className="inline-block" />
+                <span className="hidden sm:inline">Tasks</span>
+              </Link>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <FaUserCircle className="text-2xl text-blue-200" />
+                <span
+                  className="max-w-[120px] truncate text-sm font-medium"
+                  title={user?.displayName || user?.email}
+                >
+                  {user?.displayName || user?.email}
+                </span>
+              </div>
+              <button
+                onClick={logout}
+                className="flex items-center gap-1 rounded bg-red-500 px-3 py-1.5 font-semibold text-white transition hover:bg-red-600 focus:ring-2 focus:ring-red-300 focus:outline-none"
+                title="Logout"
+              >
+                <FaSignOutAlt />
+                <span className="hidden sm:inline">Logout</span>
+              </button>
+            </div>
+          </>
+        )}
+        {!isAuthenticated && (
+          <div className="flex items-center gap-4">
+            <Link
+              href="/auth"
+              className="flex items-center gap-1 transition hover:text-blue-300"
+            >
+              <FaUserCircle className="text-2xl text-blue-200" />
+              <span className="hidden sm:inline">Login</span>
+            </Link>
+          </div>
+        )}
       </div>
     </nav>
   );
