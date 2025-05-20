@@ -13,8 +13,8 @@ This document tracks the implementation status of all required features for the 
 - [x] Task status tracking (e.g., To Do, In Progress, Completed)
 
 ## 2. User Profile and Project Settings
-- [ ] User profile section for managing personal information
-- [ ] User preferences management
+- [x] User profile section for managing personal information
+- [x] User preferences management
 - [ ] Project settings configuration (name, description, etc.)
 - [ ] Team member management within projects
 
@@ -38,16 +38,16 @@ This document tracks the implementation status of all required features for the 
 - [x] Supabase client integrated (`@supabase/supabase-js`)
 - [x] Supabase credentials added to `.env`
 - [ ] Database schema design:
-  - [ ] Users table
-  - [ ] Projects table
-  - [ ] Tasks table
-  - [ ] Tags/Categories table
-  - [ ] User-Project relationships
+  - [x] Users table
+  - [x] Projects table
+  - [x] Tasks table
+  - [x] Tags/Categories table
+  - [x] User-Project relationships
 - [x] CRUD operations for tasks/projects via Supabase
 - [x] Email/password authentication using Supabase Auth
 
 ## 6. Dashboard (Optional)
-- [ ] Central dashboard overview
+- [x] Central dashboard overview
 - [ ] Task lists and project timelines
 - [ ] Analytics or summary components
 - [ ] Team collaboration features

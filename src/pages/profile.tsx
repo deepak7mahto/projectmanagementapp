@@ -15,6 +15,9 @@ export default function ProfilePage() {
   const [jobTitle, setJobTitle] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
+  // Preferences
+  const [darkMode, setDarkMode] = useState(false);
+  const [emailNotifications, setEmailNotifications] = useState(true);
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
@@ -38,6 +41,10 @@ export default function ProfilePage() {
           setJobTitle(profile.job_title || "");
           setGithubUrl(profile.github_url || "");
           setLinkedinUrl(profile.linkedin_url || "");
+          // Preferences
+          const prefs = profile.preferences || {};
+          setDarkMode(!!prefs.darkMode);
+          setEmailNotifications(prefs.emailNotifications !== false); // default true
         })
         .catch((err) => setError("Failed to load profile: " + err.message))
         .finally(() => setLoading(false));
@@ -53,7 +60,6 @@ export default function ProfilePage() {
     try {
       const updated = await updateProfile(profile.id, {
         displayName,
-
         full_name: fullName,
         bio,
         phone,
@@ -61,6 +67,10 @@ export default function ProfilePage() {
         job_title: jobTitle,
         github_url: githubUrl,
         linkedin_url: linkedinUrl,
+        preferences: {
+          darkMode,
+          emailNotifications,
+        },
       });
       setProfile(updated);
       setSuccess("Profile updated successfully.");
@@ -176,6 +186,32 @@ export default function ProfilePage() {
             disabled
           />
         </div>
+
+        {/* User Preferences Section */}
+        <div className="mt-8 border-t pt-6">
+          <h3 className="text-lg font-semibold mb-4">Preferences</h3>
+          <div className="flex items-center mb-4">
+            <input
+              id="darkMode"
+              type="checkbox"
+              className="mr-2"
+              checked={darkMode}
+              onChange={e => setDarkMode(e.target.checked)}
+            />
+            <label htmlFor="darkMode" className="font-medium">Enable Dark Mode</label>
+          </div>
+          <div className="flex items-center">
+            <input
+              id="emailNotifications"
+              type="checkbox"
+              className="mr-2"
+              checked={emailNotifications}
+              onChange={e => setEmailNotifications(e.target.checked)}
+            />
+            <label htmlFor="emailNotifications" className="font-medium">Email Notifications</label>
+          </div>
+        </div>
+
         {success && <div className="text-green-600">{success}</div>}
         {error && <div className="text-red-600">{error}</div>}
         <button

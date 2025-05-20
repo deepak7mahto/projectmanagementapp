@@ -12,6 +12,7 @@ type Profile = {
   job_title?: string;
   github_url?: string;
   linkedin_url?: string;
+  preferences?: Record<string, any>; // JSONB user preferences
 };
 
 // Get all user profiles

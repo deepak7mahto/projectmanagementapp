@@ -150,8 +150,7 @@ export default function ProjectsPage() {
                 <div style={{ fontSize: 12, color: '#888' }}>
                   {new Date(project.created_at).toLocaleDateString()}
                 </div>
-                
-                <div style={{ display: 'flex', gap: 8 }}>
+                               <div style={{ display: 'flex', gap: 8 }}>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -168,6 +167,24 @@ export default function ProjectsPage() {
                     }}
                   >
                     View
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Go directly to project settings section (details page)
+                      window.location.href = `/projects/${project.id}#settings`;
+                    }}
+                    style={{ 
+                      padding: '4px 8px', 
+                      backgroundColor: '#fbbf24', 
+                      color: '#333', 
+                      border: 'none',
+                      borderRadius: 4,
+                      fontSize: 12,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Edit
                   </button>
                   <button
                     onClick={(e) => {
