@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getProjectById } from '../../utils/supabaseProjects';
 import { getTasksByProject } from '../../utils/supabaseTasks';
 import TaskList from '../../components/TaskList';
+import ProjectMembers from '../../components/ProjectMembers';
 
 interface Project {
   id: string;
@@ -267,6 +268,9 @@ const ProjectDetailsPage = () => {
           </Link>
         </div>
       </div>
+
+      {/* Team Members section */}
+      <ProjectMembers projectId={project.id} />
 
       {/* Tasks section */}
       <div>
