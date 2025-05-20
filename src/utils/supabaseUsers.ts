@@ -4,8 +4,14 @@ import { supabase } from "./supabaseClient";
 type Profile = {
   id: string;
   displayName: string;
-  avatar_url?: string;
   created_at: string;
+  full_name?: string;
+  bio?: string;
+  phone?: string;
+  location?: string;
+  job_title?: string;
+  github_url?: string;
+  linkedin_url?: string;
 };
 
 // Get all user profiles
@@ -25,9 +31,10 @@ export async function getProfileById(id: string) {
     .from("profiles")
     .select("*")
     .eq("id", id)
-    .single();
+    .maybeSingle();
 
   if (error) throw error;
+  if (!data) throw new Error("No profile found for the given id.");
   return data as Profile;
 }
 

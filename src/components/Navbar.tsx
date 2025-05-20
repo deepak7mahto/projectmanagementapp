@@ -45,12 +45,15 @@ export default function Navbar() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <FaUserCircle className="text-2xl text-blue-200" />
-                <span
-                  className="max-w-[120px] truncate text-sm font-medium"
-                  title={user?.displayName || user?.email}
+                <Link
+                  href="/profile"
+                  className="flex items-center gap-1 hover:text-blue-300"
+                  title="View Profile"
                 >
-                  {user?.displayName || user?.email}
-                </span>
+                  <span className="max-w-[120px] truncate text-sm font-medium underline">
+                    {user?.displayName || user?.email}
+                  </span>
+                </Link>
               </div>
               <button
                 onClick={logout}
