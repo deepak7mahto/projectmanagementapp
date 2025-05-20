@@ -3,10 +3,7 @@ import { useRouter } from "next/router";
 import { useUser } from "../context/UserContext";
 import { getProfileById, updateProfile } from "../utils/supabaseUsers";
 
-import { trpc } from "../utils/trpc";
-
 export default function ProfilePage() {
-  const deleteUser = trpc.user.deleteUser.useMutation();
   const { user, loading: userLoading, isAuthenticated } = useUser();
   const [profile, setProfile] = useState<any>(null);
   const [displayName, setDisplayName] = useState("");
@@ -81,28 +78,6 @@ export default function ProfilePage() {
       setError("Failed to update profile: " + (err.message || err));
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (
-      window.confirm(
-        "Are you sure you want to delete your account? This cannot be undone.",
-      )
-    ) {
-      setLoading(true);
-      setError("");
-      try {
-        await deleteUser.mutateAsync({ id: profile.id });
-        await import("../utils/supabaseClient").then((mod) =>
-          mod.supabase.auth.signOut(),
-        );
-        router.replace("/auth");
-      } catch (err: any) {
-        setError("Failed to delete account: " + (err.message || err));
-      } finally {
-        setLoading(false);
-      }
     }
   };
 
@@ -270,15 +245,6 @@ export default function ProfilePage() {
           Save Changes
         </button>
       </form>
-      <div className="mt-10 text-center">
-        <button
-          className="rounded bg-red-600 px-6 py-2 font-semibold text-white hover:bg-red-700"
-          style={{ marginTop: 24 }}
-          onClick={handleDelete}
-        >
-          Delete Account
-        </button>
-      </div>
     </div>
   );
 }
