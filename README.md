@@ -76,22 +76,56 @@ erDiagram
 
 ## Technology Stack
 
-- **Frontend**: 
-  - Next.js 15
-  - React 19
-  - TailwindCSS
-  - Recharts for data visualization
-  - React Query for state management
+### T3 Stack Overview
+This project is built on the T3 Stack, a full-stack, typesafe web development framework that includes:
+- **TypeScript**: End-to-end type safety
+- **tRPC**: Enables type-safe API calls between client and server
+- **Tailwind CSS**: Utility-first CSS framework
+- **Next.js**: React framework for production
+- **Prisma**: Type-safe ORM (configured for Supabase)
+- **NextAuth.js**: Flexible authentication
 
-- **Backend**:
-  - tRPC for type-safe API
-  - Supabase for database and authentication
-  - Zod for schema validation
+### Frontend 
+- **Next.js 15**: Server-side rendering, API routes, and optimized build
+- **React 19**: UI component library with latest features
+- **TailwindCSS**: Responsive design with utility classes
+- **Recharts**: Interactive data visualization
+- **React Query**: Powerful data synchronization with server
 
-- **DevOps**:
-  - TypeScript for type safety
-  - ESLint & Prettier for code quality
-  - SST for infrastructure
+### Backend
+- **tRPC**: Type-safe API layer with:
+  - Automatic type inference
+  - Real-time subscriptions
+  - Integrated caching
+- **Supabase**: 
+  - PostgreSQL database
+  - Row Level Security
+  - Real-time capabilities
+  - Built-in authentication
+- **Zod**: Runtime type validation
+
+### AWS Infrastructure (via SST)
+SST (Serverless Stack) provides Infrastructure as Code for AWS:
+- **API Gateway**: Handles API requests
+- **Lambda**: Serverless compute for API endpoints
+- **CloudFront**: CDN for static assets
+- **S3**: Storage for uploads and assets
+- **DynamoDB**: NoSQL database (optional)
+- **Auto-scaling**: Managed by AWS
+- **Monitoring**: CloudWatch integration
+
+### Development & DevOps
+- **SST Features**:
+  - Live Lambda development
+  - Automatic IAM permissions
+  - Cost-effective development stages
+  - Environment management
+  - Asset deployment
+- **Code Quality**:
+  - ESLint for linting
+  - Prettier for formatting
+  - TypeScript for type checking
+  - Husky for git hooks
 
 ## Project Structure
 
@@ -152,8 +186,67 @@ src/
 - Type-safe API calls with tRPC
 - Environment variable validation with Zod
 
+## Deployment & Infrastructure
+
+### AWS Architecture
+```mermaid
+graph TD
+    Client[Client Browser] --> CF[CloudFront CDN]
+    CF --> S3[S3 Static Assets]
+    CF --> API[API Gateway]
+    API --> Lambda[Lambda Functions]
+    Lambda --> Supabase[(Supabase Database)]
+    Lambda --> DDB[(DynamoDB Optional)]
+```
+
+### SST Deployment
+SST (Serverless Stack) manages AWS infrastructure:
+
+```bash
+# Deploy to development
+npm run sst deploy --stage dev
+
+# Deploy to production
+npm run sst deploy --stage prod
+```
+
+Key SST Features:
+1. **Infrastructure as Code**: 
+   - Define AWS resources using TypeScript
+   - Automatic CloudFormation template generation
+   - Resource permissions management
+
+2. **Development Environment**:
+   - Local Lambda development
+   - Hot reloading for functions
+   - Stage management for different environments
+
+3. **AWS Resources Management**:
+   - Automatic cleanup of resources
+   - Cost optimization
+   - Built-in monitoring and debugging
+
+4. **CI/CD Integration**:
+   - GitHub Actions workflows
+   - Automated deployments
+   - Environment segregation
+
 ## Best Practices
 
+### T3 Stack Best Practices
+- Use tRPC for type-safe API communication
+- Leverage Zod for runtime type validation
+- Implement proper error boundaries
+- Follow Next.js performance guidelines
+
+### AWS & SST Best Practices
+- Configure proper IAM roles and permissions
+- Implement resource tagging
+- Set up monitoring and alerts
+- Use environment variables for configuration
+- Implement proper error handling in Lambda functions
+
+### Development Best Practices
 - TypeScript for type safety across the full stack
 - React Query for efficient data fetching and caching
 - Component-based architecture for reusability
