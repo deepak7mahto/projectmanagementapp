@@ -2,6 +2,26 @@
 
 A modern, full-stack project management solution built with Next.js, tRPC, and Supabase.
 
+🌐 **Live Demo**: [https://d3grg4oigb87jb.cloudfront.net/](https://d3grg4oigb87jb.cloudfront.net/)
+
+## Demo Screenshots
+
+### Dashboard
+![Dashboard](demo/dashboard.png)
+*Real-time project analytics and task distribution visualization*
+
+### Project Management
+![Projects](demo/projects.png)
+*Organize and track multiple projects with detailed views*
+
+### User Profile
+![Profile](demo/profile.png)
+*Personalized user settings and activity tracking*
+
+### Authentication
+![Login](demo/login.png)
+*Secure authentication with multiple login options*
+
 ## Why This Project?
 
 Managing projects and tasks effectively requires a robust, user-friendly platform that enables teams to:
