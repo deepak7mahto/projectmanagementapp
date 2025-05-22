@@ -26,7 +26,9 @@ const DashboardCharts: React.FC<DashboardChartsProps> = ({ projects, tasks }) =>
   const projectStatusCounts = React.useMemo(() => {
     const counts: Record<string, number> = {};
     projects.forEach(p => {
-      counts[p.status] = (counts[p.status] || 0) + 1;
+      // Initialize or increment the count for each status
+      const status = p.status ?? '';
+      counts[status] = (counts[status] ?? 0) + 1;
     });
     return Object.entries(counts).map(([status, count]) => ({ status, count }));
   }, [projects]);
@@ -34,12 +36,18 @@ const DashboardCharts: React.FC<DashboardChartsProps> = ({ projects, tasks }) =>
   // Aggregate tasks by project
   const taskByProject = React.useMemo(() => {
     const counts: Record<string, number> = {};
+    // Initialize counts for all projects
     projects.forEach(p => {
       counts[p.name] = 0;
     });
+    // Count tasks for each project
     tasks.forEach(t => {
       const proj = projects.find(p => p.id === t.projectId);
-      if (proj) counts[proj.name] += 1;
+      // Only increment if project exists and has a valid name
+      const projectName = proj?.name ?? '';
+      if (projectName && counts[projectName] !== undefined) {
+        counts[projectName] += 1;
+      }
     });
     return Object.entries(counts).map(([name, count]) => ({ name, count }));
   }, [projects, tasks]);
@@ -48,7 +56,8 @@ const DashboardCharts: React.FC<DashboardChartsProps> = ({ projects, tasks }) =>
   const taskStatusCounts = React.useMemo(() => {
     const counts: Record<string, number> = {};
     tasks.forEach(t => {
-      counts[t.status] = (counts[t.status] || 0) + 1;
+      const status = t.status ?? '';
+      counts[status] = (counts[status] ?? 0) + 1;
     });
     return Object.entries(counts).map(([status, count]) => ({ status, count }));
   }, [tasks]);
