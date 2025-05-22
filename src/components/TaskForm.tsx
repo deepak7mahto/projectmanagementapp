@@ -51,18 +51,23 @@ const TaskForm: React.FC<TaskFormProps> = ({
           setSelectedTagIds(tags.map(tag => tag.id));
         } catch (err) {
           console.error('Error loading task tags:', err);
+          setSelectedTagIds([]);
         }
       } else {
         setSelectedTagIds([]);
       }
     };
     
-    loadTaskTags();
+    void loadTaskTags();
   }, [editingTask]);
   
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(e, selectedTagIds);
+    try {
+      await onSubmit(e, selectedTagIds);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
   
   const handleUserChange = (userId: string) => {
@@ -77,7 +82,8 @@ const TaskForm: React.FC<TaskFormProps> = ({
   };
 
   return (
-    <form 
+    <form
+      role="form"
       onSubmit={handleFormSubmit} 
       style={{ 
         marginTop: 16, 
