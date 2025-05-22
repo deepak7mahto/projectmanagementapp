@@ -199,6 +199,24 @@ src/
 - `npm run format:write` - Format code with Prettier
 - `npm run seed-db` - Seed the database with initial data
 
+## Testing
+
+The project uses Jest and React Testing Library for comprehensive testing. For detailed test documentation, configuration, and guidelines, see [Test Documentation](TEST.md).
+
+### Test Commands
+- `npm test` - Run all tests
+- `npm test -- --coverage` - Run tests with coverage report
+- `npm test -- --watch` - Run tests in watch mode
+
+### Test Configuration
+- Jest for test running and assertions
+- React Testing Library for component testing
+- Coverage thresholds set at 80% for:
+  - Branches
+  - Functions
+  - Lines
+  - Statements
+
 ## Security
 
 - Authentication handled by NextAuth.js
